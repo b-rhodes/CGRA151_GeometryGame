@@ -1,9 +1,11 @@
-import java.util.LinkedList;
+//ArrayDeque
+import java.util.ArrayDeque;
 // COLOURS https://flatuicolors.com/
 
 GameState state;
 CurrentMenu whichMenu;
 ArrayList<MapLines> mapPoints;
+ArrayDeque<MapLines> enemies;/* fill this*/
 
 // The menu is 300x900, on the right.
 int menuWidth = 300;
