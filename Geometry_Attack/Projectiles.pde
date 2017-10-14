@@ -20,7 +20,7 @@ interface Projectile {
  * This should be the most "Generic" form of projectile. It will define regular things, but speed and the default
  * sprite for bullets.
  */
-abstract class ProjectileAbstract implements Projectile{
+abstract class ProjectileAbstract implements Projectile {
   float x;
   float y;
   float rad;
@@ -29,7 +29,7 @@ abstract class ProjectileAbstract implements Projectile{
   boolean isGeneric;
   Enemy target;
   
-  public ProjectileAbstract(float x, float y, float rad, color colour, Enemy target) {
+  /*public ProjectileAbstract(float x, float y, float rad, color colour, Enemy target) {
     this.x = x;
     this.y = y;
     this.rad = rad;
@@ -37,7 +37,7 @@ abstract class ProjectileAbstract implements Projectile{
     this.target = target;
     isGeneric = true;
     isAOE = false;
-  }
+  }*/
   
   void move(double dx, double dy) {
     x += dx;
@@ -83,13 +83,14 @@ abstract class ProjectileAbstract implements Projectile{
         return false;
       }
     }
+    return false;
   }
   
   void drawProjectile() {
     // The generic projectile will be a circle with a triangle pointing away from it, like the tail of a comet.
     noStroke();
     fill(this.getColour());
-    ellipse((float)this.getX(), (float)this.getY(), rad, rad);
+    ellipse((float)this.getX(), (float)this.getY(), 2*rad, 2*rad);
     PVector dir = new PVector(abs(this.getX() - target.getX()), abs(this.getY - target.getY));
     PVector loc = new PVector((float)this.getX(), (float)this.getY());
     float angle = dir.heading();

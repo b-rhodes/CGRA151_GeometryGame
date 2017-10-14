@@ -1,7 +1,8 @@
 enum GameState {
   MENU,
   PLAYING,
-  PAUSED
+  PAUSED,
+  LOADING
 }
 
 enum CurrentMenu {
