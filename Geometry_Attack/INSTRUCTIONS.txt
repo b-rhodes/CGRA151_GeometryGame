@@ -1,0 +1,16 @@
+There are two levels, the only difference is the layout, the starting money, and the HP which you start with.
+
+You have to stop the enemies getting to the red portal by building towers.
+
+There are two types of enemies,
+ - Regular: These (green) enemies progressively get stronger throughout the game, and each one destroyed will
+            reward you with 1 point and 1 coin for building more towers.
+ - Boss:    These (yellow) enemies also get stronger throughout the game, they have double the hp of one regular enemy,
+            and they reward more points and coins as well. As the game goes on longer, bosses will reward more
+            and more coins/points.
+
+There are three types of towers you can build:
+ - Basic:   	These towers fire once per second, and deal one damage. They have a resonable range, and only cost 5 coins.
+ - Machine Gun: These towers fire 6 times per second, and deal one damage. They have a much shorter range and cost 40 coins.
+ - AoE :	These towers fire slightly less than once per second. They fire an AoE around them, at a reasonable range dealing
+		1 damage. They cost 25 coins.
