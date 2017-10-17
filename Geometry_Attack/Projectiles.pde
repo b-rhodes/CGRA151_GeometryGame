@@ -4,6 +4,7 @@
  */
 interface Projectile {
   void move(double xTarget, double yTarget);
+  void moveNext();
   double getX();
   double getY();
   double getRad();
@@ -42,6 +43,15 @@ abstract class ProjectileAbstract implements Projectile {
   void move(double dx, double dy) {
     x += dx;
     y += dy;
+  }
+  
+  void moveNext() {
+    // calculate distance between here and target.
+    PVector dist = new PVector((float)target.getX()-x, (float)target.getY()-y);
+    PVector loc = new PVector(x, y);
+    dist.limit(4);
+    loc.add(dist);
+    move(dist.x, dist.y);
   }
   
   double getX() {
@@ -88,10 +98,14 @@ abstract class ProjectileAbstract implements Projectile {
   
   void drawProjectile() {
     // The generic projectile will be a circle with a triangle pointing away from it, like the tail of a comet.
+    if(isHit(target)) {
+      return;
+    }
     noStroke();
     fill(this.getColour());
     ellipse((float)this.getX(), (float)this.getY(), 2*rad, 2*rad);
-    PVector dir = new PVector(abs(this.getX() - target.getX()), abs(this.getY - target.getY));
+    /*
+    PVector dir = new PVector(abs((float)(target.getX() - this.getX())), abs((float)(target.getY() - this.getY())));
     PVector loc = new PVector((float)this.getX(), (float)this.getY());
     float angle = dir.heading();
     PVector v = new PVector(rad*cos(angle),rad*sin(angle)); // This is the "base" points of the triangle
@@ -106,6 +120,7 @@ abstract class ProjectileAbstract implements Projectile {
     base3.limit((float)(2*rad));
     base3.add(loc);
     triangle(base1.x, base1.y, base2.x, base2.y, base3.x, base3.y);
+    */
   }
 }
 
@@ -124,4 +139,45 @@ class BasicProjectile extends ProjectileAbstract{
     rad = 5;
   }
   
+}
+
+/**
+ * This is the AoE projectile.
+ */
+class AOEProjectile extends ProjectileAbstract{
+  
+  ArrayList<Enemy> alreadyHit;
+  
+  public AOEProjectile(float x, float y, color colour) {
+    this.x = x;
+    this.y = y;
+    this.colour = colour;
+    this.target = null;
+    isGeneric = false;
+    isAOE = true;
+    rad = 0;
+    alreadyHit = new ArrayList<Enemy>();
+  }
+  
+  void doDamage() {
+    // "isGeneric" just means you can compare the distance between them, and rad1 + rad2 to see if the projectile has hit.
+    for(Enemy enemy : enemies) {
+      double distance = (double)sqrt( sq((float)( this.getX() - enemy.getX() )) + sq(((float)( this.getY() - enemy.getY() ))) ); // sqrt(xDist^2 + yDist^2)
+      if((!alreadyHit.contains(enemy)) && distance < rad+5+(enemy.getRad()/2) && distance > rad-5-(enemy.getRad()/2)) {
+        alreadyHit.add(enemy);
+        enemy.takeDamage(1);
+      }
+    }
+  }
+  
+  void moveNext() {
+    rad += 3;
+  }
+  
+  void drawProjectile() {
+    noFill();
+    stroke(this.getColour());
+    strokeWeight(10);
+    ellipse((float)this.getX(), (float)this.getY(), 2*rad, 2*rad);
+  }
 }

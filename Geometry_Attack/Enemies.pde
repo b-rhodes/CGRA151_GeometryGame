@@ -16,6 +16,7 @@ interface Enemy {
   boolean isDead();
   void drawEnemy();
   void takeDamage(int damage);
+  boolean isBoss();
 }
 
 /**
@@ -31,6 +32,7 @@ abstract class EnemyAbstract implements Enemy {
   boolean isGeneric;
   ArrayDeque<PVector> path;
   PVector targetPoint;
+  boolean isBoss;
   
   /*
   public EnemyAbstract(double x, double y, double rad, double speed, color colour, ArrayDeque<PVector> path) {
@@ -84,8 +86,13 @@ abstract class EnemyAbstract implements Enemy {
   }
   
   boolean atEnd() {
-    PVector end = path.getLast();
-    return ( abs((float)this.getX()-end.x) < rad && abs((float)this.getY()-end.x) < rad );
+    PVector end;
+    if(!path.isEmpty()) {
+      end = path.getLast();
+    } else {
+      end = targetPoint;
+    }
+    return ( abs((float)this.getX()-end.x) <= rad && abs((float)this.getY()-end.y) <= rad );
   }
   
   void move() {
@@ -104,7 +111,7 @@ abstract class EnemyAbstract implements Enemy {
     }
     
     // If at the target point, set the new target, and the new speed.
-    if(atTarget) {
+    if(!path.isEmpty() && atTarget) {
       x = targetPoint.x;
       y = targetPoint.y;
       float v = abs((speed.x != 0) ? speed.x : speed.y);
@@ -136,6 +143,10 @@ abstract class EnemyAbstract implements Enemy {
   void takeDamage(int damage) {
     hp -= damage;
   }
+  
+  boolean isBoss() {
+    return isBoss;
+  }
 }
 
 /**
@@ -143,7 +154,7 @@ abstract class EnemyAbstract implements Enemy {
  */
 class BasicEnemy extends EnemyAbstract{
   
-  public BasicEnemy(double x, double y, double speed, int hp, color colour, ArrayDeque<PVector> path) {
+  public BasicEnemy(double x, double y, double speed, int hp, color colour, ArrayDeque<PVector> path, boolean isBoss) {
     this.x = (float) x;
     this.y = (float) y;
     this.hp = hp;
@@ -152,10 +163,11 @@ class BasicEnemy extends EnemyAbstract{
     this.path = path;
     this.isGeneric = true;
     this.targetPoint = this.path.poll();
+    this.isBoss = isBoss;
     
     if(this.path.peek().x - x == 0) {
       this.speed = new PVector(0, (float)speed);
-    } else if(this.path.peek().x - x == 0) {
+    } else if(this.path.peek().y - y == 0) {
       this.speed = new PVector((float)speed, 0);
     }
   }

@@ -9,19 +9,24 @@ class MapLines {
     this.y2 = y2;
     
     // Find xLeft/xRight
-    left = ( (x1 < x2) ? x1 : x2) - 25;
-    right = ( (x2 > x1) ? x2 : x1 ) + 25;
+    left = ( (x1 < x2) ? x1 : x2) - 12.5;
+    right = ( (x2 > x1) ? x2 : x1 ) + 12.5;
     
     // Find yTop/yBottom
-    top = ( (y1 < y2) ? y1 : y2 ) - 25;
-    bottom = ( (y2 > y1) ? y2 : y1 ) + 25;
+    top = ( (y1 < y2) ? y1 : y2 ) - 12.5;
+    bottom = ( (y2 > y1) ? y2 : y1 ) + 12.5;
   }
   
   void drawLine() {
+    /*
     rectMode(CORNER);
-    noStroke();
+    //noStroke();
+    stroke(255);
     fill(225,225,225);
-    rect(left, top, right, bottom);
+    rect(left, top, right, bottom);*/
+    strokeWeight(50);
+    stroke(225,225,225);
+    line(x1,y1,x2,y2);
   }
   
   float[] getP1() {
@@ -38,5 +43,26 @@ class MapLines {
   float getRight() {return right;}
   float getTop() {return top;}
   float getBottom() {return bottom;}
+  
+  boolean isOn(double x, double y, double rad) {
+    if((x1-rad <= x && x <= x2+rad) || (x2-rad <= x && x <= x1+rad)) {
+      if(y1-25-rad <= y && y <= y1+25+rad) {
+        return true;
+      }
+      if(y2-25-rad <= y && y <= y2+25+rad) {
+        return true;
+      }
+    }
+    if((y1-rad <= y && y <= y2+rad) || (y2-rad <= y && y <= y1+rad)) {
+      if(x1-25-rad <= x && x <= x1+25+rad) {
+        return true;
+      }
+      if(x2-25-rad <= x && x <= x2+25+rad) {
+        return true;
+      }
+    }
+    
+    return false;
+  }
   
 }
